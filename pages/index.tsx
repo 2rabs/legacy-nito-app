@@ -10,7 +10,7 @@ const Home: NextPage<{ liff: Liff | null; liffError: string | null }> = ({
   return (
     <div>
       <Head>
-        <title>LIFF App</title>
+        <title>NITO</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
