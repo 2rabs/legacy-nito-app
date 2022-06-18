@@ -663,6 +663,13 @@
   dependencies:
     "@supabase/auth-helpers-shared" "0.1.0"
 
+"@supabase/auth-helpers-react@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-react/-/auth-helpers-react-0.2.0.tgz#c10173c72f1291620dc0a6d2b8a59a9f694dc051"
+  integrity sha512-z76xHUJWn3/0Ixggp96zthkMJm7nsoYXojbjhVsQkUIjRLiglrKV329EJjEt1anuzvyamOkHuuseWwzGF1xtUA==
+  dependencies:
+    "@supabase/auth-helpers-shared" "0.1.0"
+
 "@supabase/auth-helpers-shared@0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-shared/-/auth-helpers-shared-0.1.0.tgz#46f09874fa49bcb2c9fb472b883fc541d56fe11a"
