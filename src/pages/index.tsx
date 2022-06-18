@@ -2,20 +2,11 @@ import type { Liff } from "@line/liff";
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import { useEffect, useState } from "react";
 
-const Home: NextPage<{
+const Login: NextPage<{
   liff: Liff | null;
   liffError: string | null;
 }> = ({liff, liffError}) => {
-  const [name, setName] = useState<string>();
-
-  useEffect(() => {
-    liff?.getProfile()?.then((profile) => {
-      setName(profile.displayName);
-    });
-  }, [liff]);
-
   return (
     <div>
       <Head>
@@ -27,7 +18,6 @@ const Home: NextPage<{
       <main className={styles.main}>
         <h1 className="text-3xl font-bold underline">create-liff-app</h1>
         {liff && <p>LIFF init succeeded.</p>}
-        {name && <p>{name}</p>}
         {liffError && (
           <>
             <p>LIFF init failed.</p>
@@ -48,4 +38,4 @@ const Home: NextPage<{
   );
 };
 
-export default Home;
+export default Login;
