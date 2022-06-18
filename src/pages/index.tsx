@@ -1,12 +1,11 @@
-import type { Liff } from "@line/liff";
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
+import { useLiff } from "@/components/LiffProvider";
 
-const Login: NextPage<{
-  liff: Liff | null;
-  liffError: string | null;
-}> = ({liff, liffError}) => {
+const Login: NextPage = () => {
+  const { liff, error } = useLiff();
+
   return (
     <div>
       <Head>
@@ -18,11 +17,11 @@ const Login: NextPage<{
       <main className={styles.main}>
         <h1 className="text-3xl font-bold underline">create-liff-app</h1>
         {liff && <p>LIFF init succeeded.</p>}
-        {liffError && (
+        {error && (
           <>
             <p>LIFF init failed.</p>
             <p>
-              <code>{liffError}</code>
+              <code>{error.message}</code>
             </p>
           </>
         )}
