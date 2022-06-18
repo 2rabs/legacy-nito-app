@@ -1,6 +1,8 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { useLiff } from "@/hooks/core/liff";
+import { UserProvider } from '@supabase/auth-helpers-react';
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const { liffObject, liffError } = useLiff(process.env.NEXT_PUBLIC_LIFF_ID!);
@@ -11,7 +13,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   pageProps.liffError = liffError;
   return (
     <>
-      <Component {...pageProps} />
+      <UserProvider supabaseClient={supabaseClient}>
+        <Component {...pageProps} />
+      </UserProvider>
     </>
   );
 }
