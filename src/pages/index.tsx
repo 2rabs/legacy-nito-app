@@ -35,7 +35,7 @@ const Login: NextPage = () => {
 
         <main className={ styles.main }>
           { error && <p>{ error.message }</p> }
-          { nickname && <p>`LINE Nickname: ${nickname}`</p> }
+          { nickname && <p>LINE Nickname: {nickname}</p> }
           <Auth
             supabaseClient={ supabaseClient }
             // providers={ ['google'] }
