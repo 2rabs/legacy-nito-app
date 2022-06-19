@@ -1,75 +1,17 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import { useEffect, useState } from "react";
-import { useUser } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Auth } from "@supabase/ui";
 import { useLiff } from "@/components/LiffProvider";
-
-interface ProjectUser {
-  userId: number;
-  lineId: string | null;
-  nickname: string;
-}
+import useUser from "@/hooks/user";
+import { useUser as useSupabaseUser } from "@supabase/auth-helpers-react";
 
 const Login: NextPage = () => {
   const { nickname } = useLiff();
 
-  const { user, error } = useUser();
-
-  const [
-    projectUser,
-    setProjectUser
-  ] = useState<ProjectUser | undefined>(undefined);
-
-  const [
-    userParticipationSchedule,
-    setUserParticipationSchedule
-  ] = useState<any[] | undefined>(undefined);
-
-  useEffect(() => {
-    async function fetchProjectUser() {
-      if (!user) return;
-
-      const { data } = await supabaseClient
-        .from('users')
-        .select('*')
-        .eq('uuid', user.id);
-
-      if (data) {
-        const user = data[0];
-        setProjectUser({
-          userId: Number(user['id']),
-          lineId: user['line_id'],
-          nickname: user['nickname'],
-        });
-      }
-    }
-
-    if (user) {
-      fetchProjectUser();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    async function fetchUserParticipationSchedule() {
-      if (!projectUser) return;
-
-      const { data } = await supabaseClient
-        .from('user_participation_schedule')
-        .select('*')
-        .eq('user_id', projectUser.userId);
-
-      if (data) {
-        setUserParticipationSchedule(data);
-      }
-    }
-
-    if (projectUser) {
-      fetchUserParticipationSchedule();
-    }
-  }, [projectUser]);
+  const { user, error } = useSupabaseUser();
+  const { user: projectUser, userParticipationSchedule } = useUser();
 
   if (!user) {
     return (
