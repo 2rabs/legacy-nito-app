@@ -7,22 +7,69 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Auth } from "@supabase/ui";
 import { useLiff } from "@/components/LiffProvider";
 
+interface ProjectUser {
+  userId: number;
+  lineId: string | null;
+  nickname: string;
+}
+
 const Login: NextPage = () => {
   const { nickname } = useLiff();
 
   const { user, error } = useUser();
-  const [data, setData] = useState<any[] | null>(null);
+
+  const [
+    projectUser,
+    setProjectUser
+  ] = useState<ProjectUser | undefined>(undefined);
+
+  const [
+    userParticipationSchedule,
+    setUserParticipationSchedule
+  ] = useState<any[] | undefined>(undefined);
 
   useEffect(() => {
-    async function loadData() {
-      const { data } = await supabaseClient.from('test').select('*');
-      setData(data);
+    async function fetchProjectUser() {
+      if (!user) return;
+
+      const { data } = await supabaseClient
+        .from('users')
+        .select('*')
+        .eq('uuid', user.id);
+
+      if (data) {
+        const user = data[0];
+        setProjectUser({
+          userId: Number(user['id']),
+          lineId: user['line_id'],
+          nickname: user['nickname'],
+        });
+      }
     }
-    // Only run query once user is logged in.
+
     if (user) {
-      loadData();
+      fetchProjectUser();
     }
   }, [user]);
+
+  useEffect(() => {
+    async function fetchUserParticipationSchedule() {
+      if (!projectUser) return;
+
+      const { data } = await supabaseClient
+        .from('user_participation_schedule')
+        .select('*')
+        .eq('user_id', projectUser.userId);
+
+      if (data) {
+        setUserParticipationSchedule(data);
+      }
+    }
+
+    if (projectUser) {
+      fetchUserParticipationSchedule();
+    }
+  }, [projectUser]);
 
   if (!user) {
     return (
@@ -55,11 +102,14 @@ const Login: NextPage = () => {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
 
-      <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
-      <p>user:</p>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-      <p>client-side data fetching with RLS</p>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <button onClick={ () => supabaseClient.auth.signOut() }>Sign out</button>
+
+      { projectUser && <p>UserName: { projectUser.nickname }</p> }
+
+      { userParticipationSchedule && <>
+          <p>UserParticipationSchedule</p>
+          <pre>{ JSON.stringify(userParticipationSchedule, null, 2) }</pre>
+      </> }
     </div>
   );
 };
