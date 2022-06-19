@@ -38,7 +38,7 @@ export const LiffProvider = (props: Props) => {
             setLiffError(error.toString());
           });
       });
-  });
+  }, []);
 
   const value = {
     liff: liffObject,
