@@ -3,6 +3,9 @@ import { Liff } from "@line/liff";
 
 declare type LiffState = {
   liff: Liff | null;
+  userId: string | undefined;
+  nickname: string | undefined;
+  email: string | undefined;
   error?: Error;
 };
 
@@ -22,6 +25,10 @@ export const LiffProvider = (props: Props) => {
   const [liffObject, setLiffObject] = useState<Liff | null>(null);
   const [liffError, setLiffError] = useState<string | null>(null);
 
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+  const [nickname, setNickname] = useState<string | undefined>(undefined);
+  const [email, setEmail] = useState<string | undefined>(undefined);
+
   useEffect(() => {
     import("@line/liff")
       .then((liff) => liff.default)
@@ -32,6 +39,19 @@ export const LiffProvider = (props: Props) => {
           .then(() => {
             console.log("LIFF init succeeded.");
             setLiffObject(liff);
+
+            if (!liff.isLoggedIn()) return;
+
+            const payload = liff.getDecodedIDToken();
+
+            if (payload) {
+              setEmail(payload.email);
+            }
+
+            liff.getProfile().then((profile) => {
+              setUserId(profile.userId);
+              setNickname(profile.displayName);
+            });
           })
           .catch((error: Error) => {
             console.log("LIFF init failed.");
@@ -42,12 +62,15 @@ export const LiffProvider = (props: Props) => {
 
   const value = {
     liff: liffObject,
+    userId,
+    nickname,
+    email,
     liffError,
   };
-  return <LiffContext.Provider value={value} {...props} />;
+  return <LiffContext.Provider value={ value } { ...props } />;
 }
 
-export const useLiff = () => {
+export const useLiff: () => LiffState = () => {
   const context = useContext(LiffContext);
   if (context === undefined) {
     throw new Error(`useLiff must be used within a LiffProvider.`);
