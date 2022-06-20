@@ -1,59 +1,32 @@
 import type { NextPage } from "next";
-import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Auth } from "@supabase/ui";
 import { useLiff } from "@/components/LiffProvider";
 import useUser from "@/hooks/user";
 import { useUser as useSupabaseUser } from "@supabase/auth-helpers-react";
+import Head from "@/components/Head";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-const Login: NextPage = () => {
-  const { nickname } = useLiff();
+const LandingScreen: NextPage = () => {
+  const router = useRouter();
 
-  const { user, error } = useSupabaseUser();
-  const { user: projectUser, userParticipationSchedule } = useUser();
-
-  if (!user) {
-    return (
-      <div>
-        <Head>
-          <title>NITO</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-          <link rel="icon" href="/favicon.ico"/>
-        </Head>
-
-        <main className={ styles.main }>
-          { error && <p>{ error.message }</p> }
-          { nickname && <p>LINE Nickname: {nickname}</p> }
-          <Auth
-            supabaseClient={ supabaseClient }
-            // providers={ ['google'] }
-            socialLayout="horizontal"
-            socialButtonSize="xlarge"
-          />
-        </main>
-      </div>
-    );
-  }
+  const onNavigateToAuthClick = () => {
+    router.push('/auth');
+  };
 
   return (
     <div>
-      <Head>
-        <title>NITO</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="icon" href="/favicon.ico"/>
-      </Head>
+      <Head/>
 
-      <button onClick={ () => supabaseClient.auth.signOut() }>Sign out</button>
-
-      { projectUser && <p>UserName: { projectUser.nickname }</p> }
-
-      { userParticipationSchedule && <>
-          <p>UserParticipationSchedule</p>
-          <pre>{ JSON.stringify(userParticipationSchedule, null, 2) }</pre>
-      </> }
+      <main className={ styles.main }>
+        <h1>NITO</h1>
+        <p>NITO はトランポリン活動グループの参加予定ツールです。</p>
+        <button onClick={ () => onNavigateToAuthClick() }>NITO を利用する</button>
+      </main>
     </div>
   );
 };
 
-export default Login;
+export default LandingScreen;
