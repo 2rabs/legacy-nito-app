@@ -1,32 +1,50 @@
 import type { NextPage } from "next";
-import styles from "@/styles/Home.module.css";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { Auth } from "@supabase/ui";
-import { useLiff } from "@/components/LiffProvider";
-import useUser from "@/hooks/user";
-import { useUser as useSupabaseUser } from "@supabase/auth-helpers-react";
 import Head from "@/components/Head";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useCurrentUser, useParticipationSchedule, useSchedule } from "@/hooks";
 
-const LandingScreen: NextPage = () => {
-  const router = useRouter();
+const HomeScreen: NextPage = () => {
+  const { isAuthChecking, currentUser } = useCurrentUser();
+  const {
+    isLoading: isParticipationScheduleLoading,
+    participationSchedules
+  } = useParticipationSchedule();
 
-  const onNavigateToAuthClick = () => {
-    router.push('/auth');
-  };
+  const {
+    isLoading: isLatestScheduledDateLoading,
+    latestScheduledDate
+  } = useSchedule();
+
+  if (isAuthChecking) {
+    return (
+      <div>ログイン情報を確認中…</div>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <div>ログインしていません</div>
+    );
+  }
 
   return (
     <div>
-      <Head/>
+      <Head pageName={ 'Home' }/>
 
-      <main className={ styles.main }>
-        <h1>NITO</h1>
-        <p>NITO はトランポリン活動グループの参加予定ツールです。</p>
-        <button onClick={ () => onNavigateToAuthClick() }>NITO を利用する</button>
-      </main>
+      <button onClick={ () => supabaseClient.auth.signOut() }>Sign out</button>
+
+      <p>ユーザー名: { currentUser.nickname }</p>
+
+      { isLatestScheduledDateLoading && <p>次回の開催日を確認中です…</p>}
+      { latestScheduledDate && <p>次回の開催日は { latestScheduledDate.toLocaleDateString() } です。</p>}
+
+      { isParticipationScheduleLoading && <p>参加予定のスケジュールを確認中です…</p>}
+      { participationSchedules && <>
+          <p>参加予定日</p>
+          <pre>{ JSON.stringify(participationSchedules, null, 2) }</pre>
+      </> }
     </div>
   );
 };
 
-export default LandingScreen;
+export default HomeScreen;

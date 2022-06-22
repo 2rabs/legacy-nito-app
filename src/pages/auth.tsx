@@ -4,11 +4,11 @@ import Head from "@/components/Head";
 import styles from "@/styles/Home.module.css";
 import { Auth } from "@supabase/ui";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import useUser from "@/hooks/user";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const AuthScreen: NextPage = () => {
+  const { isAuthChecking, currentUser } = useCurrentUser();
   const { user: authUser, error } = useSupabaseUser();
-  const { user } = useUser();
 
   return (
     <div>
