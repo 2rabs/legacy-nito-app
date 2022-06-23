@@ -13,7 +13,7 @@ const AppInit = () => {
   const { user: authUser, isLoading } = useSupabaseUser();
   const setCurrentUser = useSetRecoilState(currentUserState);
 
-  useEffect(() => {
+  const effect = () => {
     (async function () {
       if (isLoading) return;
 
@@ -47,7 +47,10 @@ const AppInit = () => {
         await router.replace('/auth');
       }
     })();
-  }, [authUser]);
+  }
+
+  useEffect(effect, []);
+  useEffect(effect, [authUser]);
 
   return null;
 };
