@@ -50,7 +50,7 @@ const AppInit = () => {
   }
 
   useEffect(effect, []);
-  useEffect(effect, [authUser]);
+  useEffect(effect, [authUser, isLoading]);
 
   return null;
 };
