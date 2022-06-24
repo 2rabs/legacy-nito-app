@@ -7,7 +7,7 @@ export const BottomNavigation: React.FC<Props> = () => {
   return (
     <div className="visible md:invisible w-full h-full wrapper">
       <div
-        className="fixed bottom-0 flex justify-center w-full transition-shadow bg-white border md:px-10 hover:shadow-xl">
+        className="fixed bottom-0 safe-area-inset-bottom flex justify-center w-full transition-shadow bg-white border md:px-10 hover:shadow-xl">
         <div className="px-3 cursor-pointer md:px-6 hover:bg-gray-100">
           <a href="#!" className="flex flex-col py-2 text-gray-700 md:w-20">
             <div className="flex justify-center">
