@@ -2,11 +2,11 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { UserProvider, useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
-import { LiffProvider } from "@/components/LiffProvider";
 import { useEffect } from "react";
 import { RecoilRoot, useSetRecoilState } from "recoil";
 import { currentUserState } from "@/states/currentUser";
 import { useRouter } from "next/router";
+import { LayoutWrapper, LiffProvider } from '@/components';
 
 const AppInit = () => {
   const router = useRouter();
@@ -60,8 +60,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <RecoilRoot>
       <UserProvider supabaseClient={supabaseClient}>
         <LiffProvider>
-          <Component {...pageProps} />
-          <AppInit />
+          <LayoutWrapper>
+            <Component {...pageProps} />
+            <AppInit />
+          </LayoutWrapper>
         </LiffProvider>
       </UserProvider>
     </RecoilRoot>
