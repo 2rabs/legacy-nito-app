@@ -22,8 +22,6 @@ export function useSchedule() {
           .limit(1)
           .single();
 
-        console.log(data);
-
         if (!data) {
           setLatestScheduledDate(null);
           return;
@@ -31,11 +29,9 @@ export function useSchedule() {
 
         const { date: dateString } = data;
         const date = new Date(dateString);
-        console.log(date);
+
         setLatestScheduledDate(date);
       } catch {
-        console.log('error');
-
         setLatestScheduledDate(null);
       } finally {
         setLoading(false);
