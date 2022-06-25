@@ -22,7 +22,7 @@ export function useParticipationSchedule() {
 
       try {
         const {data} = await supabaseClient
-          .from('user_participation_schedule')
+          .from('user_participation_schedules')
           .select('*')
           .eq('user_id', user.userId);
 
