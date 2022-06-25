@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 
+export type Schedule = {
+  id: number;
+  date: Date;
+}
+
 export function useSchedule() {
   const [ isLoading, setLoading ] = useState(false);
-  const [
-    latestScheduledDate,
-    setLatestScheduledDate
-  ] = useState<Date | null | undefined>(undefined);
+  const [latestSchedule, setLatestSchedule] = useState<Schedule>();
 
   useEffect(() => {
     (async function () {
@@ -15,24 +17,25 @@ export function useSchedule() {
       try {
         const { data } = await supabaseClient
           .from('schedules')
-          .select('date')
-          .gte('date', new Date().toISOString())
+          .select('id, date')
+          .gt('date', new Date().toISOString())
           .is('deleted_at', null)
           .order('date', { ascending: true })
           .limit(1)
           .single();
 
         if (!data) {
-          setLatestScheduledDate(null);
           return;
         }
 
         const { date: dateString } = data;
         const date = new Date(dateString);
 
-        setLatestScheduledDate(date);
+        setLatestSchedule({
+          id: data.id,
+          date,
+        });
       } catch {
-        setLatestScheduledDate(null);
       } finally {
         setLoading(false);
       }
@@ -41,6 +44,6 @@ export function useSchedule() {
 
   return {
     isLoading,
-    latestScheduledDate,
+    latestSchedule: latestSchedule,
   };
 }
