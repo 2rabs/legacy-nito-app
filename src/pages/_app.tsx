@@ -1,12 +1,14 @@
 import "../styles/globals.css";
+import 'react-toastify/dist/ReactToastify.css';
 import type { AppProps } from "next/app";
 import { UserProvider, useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { RecoilRoot, useSetRecoilState } from "recoil";
 import { currentUserState } from "@/states/currentUser";
 import { useRouter } from "next/router";
 import { LayoutWrapper, LiffProvider } from '@/components';
+import { ToastContainer } from "react-toastify";
 
 const AppInit = () => {
   const router = useRouter();
@@ -63,6 +65,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           <LayoutWrapper>
             <Component {...pageProps} />
             <AppInit />
+            <ToastContainer />
           </LayoutWrapper>
         </LiffProvider>
       </UserProvider>
