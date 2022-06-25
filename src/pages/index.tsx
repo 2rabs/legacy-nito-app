@@ -3,8 +3,15 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Head from "@/components/Head";
 import { useCurrentUser, useParticipationSchedule, useSchedule } from "@/hooks";
 import { TopContent } from "@/components";
+import React, { useEffect, useState } from "react";
+import { ProgressTimeLatch } from "@/lib";
 
 const HomeScreen: NextPage = () => {
+  const [showProgress, setShowProgress] = useState(false);
+  const progressTimeLatch = new ProgressTimeLatch((showProgress: boolean) => {
+    setShowProgress(showProgress);
+  })
+
   const { isAuthChecking, currentUser } = useCurrentUser();
   const {
     isLoading: isParticipationScheduleLoading,
@@ -16,26 +23,22 @@ const HomeScreen: NextPage = () => {
     latestScheduledDate
   } = useSchedule();
 
-  if (isAuthChecking) {
-    return (
-      <div>ログイン情報を確認中…</div>
+  useEffect(() => {
+    progressTimeLatch.loading = (
+      isAuthChecking &&
+      isParticipationScheduleLoading &&
+      isLatestScheduledDateLoading
     );
-  }
+  }, [
+    isAuthChecking,
+    isParticipationScheduleLoading,
+    isLatestScheduledDateLoading,
+  ])
 
-  if (!currentUser) {
-    return (
-      <div>ログインしていません</div>
-    );
-  }
-
-  const resolveMessage: () => string = () => {
-    if (isLatestScheduledDateLoading) {
-      return '次回の開催日を確認中です…';
-    }
-
+  const resolveMessage: () => string | undefined = () => {
     return latestScheduledDate
       ? `次回の開催日は ${ latestScheduledDate.toLocaleDateString() } です。`
-      : '';
+      : undefined;
   };
 
   const onSignOutButtonClick = () => {
@@ -43,15 +46,16 @@ const HomeScreen: NextPage = () => {
   };
 
   return (
-    <div>
+    <>
       <Head pageName={ 'Home' }/>
 
       <TopContent
+        showProgress={ showProgress }
         title='NITO'
         message={ resolveMessage() }
         onSignOutButtonClick={ () => onSignOutButtonClick() }
       />
-    </div>
+    </>
   );
 };
 
