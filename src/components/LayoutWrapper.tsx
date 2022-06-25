@@ -1,5 +1,5 @@
 import React from "react";
-import { BottomNavigation, SectionContainer } from "@/components";
+import { SectionContainer } from "@/components";
 
 type Props = {
   children: React.ReactNode,
@@ -13,7 +13,6 @@ export const LayoutWrapper: React.FC<Props> = ({ children }: Props) => {
           <main className="mb-auto">{ children }</main>
         </div>
       </SectionContainer>
-      <BottomNavigation/>
     </>
   );
 };
