@@ -54,7 +54,7 @@ export function useParticipationSchedule() {
 
     try {
       const {data: participated, error: participatedError} = await supabaseClient
-        .from('participations')
+        .from('participation')
         .select('id', { count: 'exact' })
         .eq('schedule_id', schedule.id)
         .eq('user_id', currentUser.userId)
@@ -72,7 +72,7 @@ export function useParticipationSchedule() {
       }
 
       const { error: participateError } = await supabaseClient
-        .from('participations')
+        .from('participation')
         .insert([
           {
             schedule_id: schedule.id,
