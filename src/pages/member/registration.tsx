@@ -60,7 +60,7 @@ const MemberRegistrationScreen: NextPage = () => {
           </div>
 
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-            <form className="px-4 py-8 sm:px-10 space-y-6" action="#" method="POST">
+            <form className="px-4 py-8 sm:px-10 space-y-6">
               <label
                 htmlFor="nickname"
                 className="block text-sm font-medium text-gray-700"
