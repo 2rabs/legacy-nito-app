@@ -26,22 +26,23 @@ const AppInit = () => {
       }
 
       try {
-        const { data } = await supabaseClient
+        const { data: member } = await supabaseClient
           .from('members')
           .select('*')
-          .eq('uuid', authUser.id);
+          .eq('uuid', authUser.id)
+          .limit(1)
+          .single();
 
-        if (!data) {
+        if (!member) {
           setCurrentUser(null);
-          await router.replace('/auth');
+          await router.replace('/member/registration');
           return;
         }
 
-        const user = data[0];
         setCurrentUser({
-          userId: Number(user['id']),
-          lineId: user['line_id'],
-          nickname: user['nickname'],
+          userId: Number(member['id']),
+          lineId: member['line_id'],
+          nickname: member['nickname'],
         });
         await router.replace('/');
       } catch {
