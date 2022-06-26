@@ -1,23 +1,33 @@
 import { NextPage } from "next";
-import { useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { ProgressCircular, useLiff } from "@/components";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "react-toastify";
 import { useUser as useSupabaseUser } from "@supabase/auth-helpers-react";
+import { instanceOf } from "prop-types";
 
 const MemberRegistrationScreen: NextPage = () => {
   const { userId: lineId } = useLiff();
   const { user: authUser } = useSupabaseUser();
   const router = useRouter();
+
   const [nickname, setNickname] = useState('');
   const [isRegistering, setRegistering] = useState(false);
+  const [error, setError] = useState<Error>();
+
+  useCallback(() => {
+    if (!error) return;
+    toast.error(error.message)
+  }, [error]);
 
   const onChangeNickname = (value: string) => {
     setNickname(value);
   };
 
-  const onSubmitButtonClick = () => {
+  const onSubmit = (event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+
     const trimmedNickname = nickname.trim();
     if (!trimmedNickname) return;
     if (!authUser) return;
@@ -36,15 +46,20 @@ const MemberRegistrationScreen: NextPage = () => {
             }
           ]);
 
+        console.log(registerError);
+
         if (!!registerError) {
-          toast(registerError.message, { type: 'error'});
+          setError(new Error(registerError.message));
           return;
         }
 
+        console.log('success');
         toast('メンバー登録が完了しました 🎉', { type: 'success'});
         router.replace('/');
       } catch (e) {
-        toast('エラーが発生しました。', { type: 'error'});
+        if (e instanceof Error) {
+          setError(new Error(e.message));
+        }
       } finally {
         setRegistering(false);
       }
@@ -60,7 +75,7 @@ const MemberRegistrationScreen: NextPage = () => {
           </div>
 
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-            <form className="px-4 py-8 sm:px-10 space-y-6">
+            <form className="px-4 py-8 sm:px-10 space-y-6" onSubmit={ (event) => onSubmit(event) }>
               <label
                 htmlFor="nickname"
                 className="block text-sm font-medium text-gray-700"
@@ -83,7 +98,6 @@ const MemberRegistrationScreen: NextPage = () => {
               <button
                 type="submit"
                 className="flex mx-auto mt-16 items-center justify-center w-full text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-                onClick={ () => onSubmitButtonClick() }
               >メンバー登録して利用を始める
               </button>
             </form>
