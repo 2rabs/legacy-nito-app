@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { FormEvent, useCallback, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ProgressCircular, useLiff } from "@/components";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
@@ -16,7 +16,7 @@ const MemberRegistrationScreen: NextPage = () => {
   const [isRegistering, setRegistering] = useState(false);
   const [error, setError] = useState<Error>();
 
-  useCallback(() => {
+  useEffect(() => {
     if (!error) return;
     toast.error(error.message)
   }, [error]);
@@ -66,6 +66,10 @@ const MemberRegistrationScreen: NextPage = () => {
     })();
   };
 
+  const onSignOutButtonClick = () => {
+    supabaseClient.auth.signOut();
+  };
+
   return (
     <>
       <section>
@@ -104,6 +108,12 @@ const MemberRegistrationScreen: NextPage = () => {
           </div>
         </div>
       </section>
+
+      <button
+        className="flex mx-auto mt-16 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+        onClick={ () => onSignOutButtonClick() }>サインアウト
+      </button>
+
       <ProgressCircular isVisible={ isRegistering }/>
     </>
   )
