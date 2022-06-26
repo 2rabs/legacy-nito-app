@@ -37,7 +37,7 @@ const useUser: () => UserState = () => {
       if (!authUser) return;
 
       const {data} = await supabaseClient
-        .from('users')
+        .from('members')
         .select('*')
         .eq('uuid', authUser.id);
 
@@ -61,9 +61,9 @@ const useUser: () => UserState = () => {
       if (!user) return;
 
       const {data} = await supabaseClient
-        .from('user_participation_schedule')
+        .from('member_participation_schedule')
         .select('*')
-        .eq('user_id', user.userId);
+        .eq('member_id', user.userId);
 
       if (data) {
         setUserParticipationSchedule(data);

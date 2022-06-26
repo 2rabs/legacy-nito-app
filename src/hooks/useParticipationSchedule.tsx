@@ -22,9 +22,9 @@ export function useParticipationSchedule() {
 
       try {
         const {data} = await supabaseClient
-          .from('user_participation_schedules')
+          .from('member_participation_schedules')
           .select('*')
-          .eq('user_id', user.userId);
+          .eq('member_id', user.userId);
 
         setParticipationSchedules(data);
       } catch {
@@ -57,7 +57,7 @@ export function useParticipationSchedule() {
         .from('participation')
         .select('id', { count: 'exact' })
         .eq('schedule_id', schedule.id)
-        .eq('user_id', currentUser.userId)
+        .eq('member_id', currentUser.userId)
         .limit(1);
 
       if (!!participatedError) {
@@ -76,7 +76,7 @@ export function useParticipationSchedule() {
         .insert([
           {
             schedule_id: schedule.id,
-            user_id: currentUser.userId,
+            member_id: currentUser.userId,
           }
         ]);
 

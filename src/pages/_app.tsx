@@ -27,7 +27,7 @@ const AppInit = () => {
 
       try {
         const { data } = await supabaseClient
-          .from('users')
+          .from('members')
           .select('*')
           .eq('uuid', authUser.id);
 
