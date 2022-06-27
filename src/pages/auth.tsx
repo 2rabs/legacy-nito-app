@@ -15,7 +15,6 @@ const AuthScreen: NextPage = () => {
       <Head pageName={ 'Auth' }/>
 
       <main className={ styles.main }>
-        { error && <p>{ error.message }</p> }
         <Auth
           supabaseClient={ supabaseClient }
           // providers={ ['google'] }
