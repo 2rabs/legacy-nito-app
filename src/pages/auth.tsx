@@ -21,6 +21,7 @@ const AuthScreen: NextPage = () => {
           // providers={ ['google'] }
           socialLayout="horizontal"
           socialButtonSize="xlarge"
+          view='magic_link'
         />
       </main>
     </div>
