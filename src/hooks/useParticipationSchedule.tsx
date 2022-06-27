@@ -4,13 +4,9 @@ import { useEffect, useState } from "react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { CurrentUser } from "@/types";
 import { Schedule } from "@/hooks/useSchedule";
-import { useLiff } from "@/components";
-import { TextMessage } from "@line/bot-sdk/lib/types";
-import { rejects } from "assert";
 
 export function useParticipationSchedule() {
   const currentUser = useRecoilValue(currentUserState);
-  const { liff } = useLiff();
 
   const [isLoading, setLoading] = useState(false);
   const [
@@ -92,34 +88,6 @@ export function useParticipationSchedule() {
       const message = `${schedule.date.toLocaleDateString()} に参加登録しました🎉`;
 
       setScheduleMessage(message);
-
-      if (!liff) return;
-      liff.permission.query('chat_message.write')
-        .then((status) => {
-          switch (status.state) {
-            case "granted":
-              break;
-            case "prompt":
-              new Error('メッセージの権限付与にユーザーが未同意');
-              break;
-            case "unavailable":
-              new Error('指定したスコープをチャネルが持たないため、利用不可');
-              break;
-          }
-        })
-        .then(() => {
-          liff.sendMessages([
-            {
-              type: "text",
-              text: message,
-            },
-          ]);
-        })
-        .catch((reason) => {
-          if (reason instanceof Error) {
-            console.log(reason.message);
-          }
-        });
     } catch(error) {
     } finally {
       setLoading(false);
