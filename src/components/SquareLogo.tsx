@@ -1,14 +1,27 @@
-import React from "react";
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 export const SquareLogo: React.FC<Props> = () => {
   return (
-    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-         x="0px" y="0px" width="410px" height="410px" viewBox="0 0 410 410" enableBackground="new 0 0 410 410"
+    <svg
+      version='1.1'
+      id='Layer_1'
+      xmlns='http://www.w3.org/2000/svg'
+      x='0px'
+      y='0px'
+      width='410px'
+      height='410px'
+      viewBox='0 0 410 410'
+      enableBackground='new 0 0 410 410'
     >
-      <image id="image0" width="410" height="410" x="0" y="0"
-             href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAYAAAA2BoVjAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+      <image
+        id='image0'
+        width='410'
+        height='410'
+        x='0'
+        y='0'
+        href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAYAAAA2BoVjAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAA
 B3RJTUUH5gYYFxgDFF+k+QAAAAFvck5UAc+id5oAADc1SURBVHja7d1ZtFxXfefx765TVXfUeCVL
 smR5km3Jk2zjGdt4NgYPBGwgmBmTkIaGzMmCdHc6/ZKXfu3w0J1kddLppBNICCEhAUKwHTMZsLEZ
@@ -260,7 +273,8 @@ jQdut65OJBGl7HFpwdcd/Mj6ZkX64cJGzZ/t/+faIb//ZdSeXGQleymvEe2zhJ9LkWR4+D6LmgAc
 FDTd3cg/6/eLioyYh+mes1EC3wnTZ1qoIym5d/E/HDqieQb4mnWFIjFzJa8Ea4cVoVqoI8lwYdDy
 ikODpuPgM6jvmchh+fJbwzxKCBuRFCwQVjG/4v8DX8jt+XSY+BQAAAAldEVYdGRhdGU6Y3JlYXRl
 ADIwMjItMDYtMjRUMjM6MjQ6MDMrMDA6MDCD1tNkAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIyLTA2
-LTI0VDIzOjI0OjAzKzAwOjAw8otr2AAAAABJRU5ErkJggg=="/>
+LTI0VDIzOjI0OjAzKzAwOjAw8otr2AAAAABJRU5ErkJggg=='
+      />
     </svg>
   );
-}
+};

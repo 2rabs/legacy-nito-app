@@ -35,7 +35,7 @@ export class ProgressTimeLatch {
   constructor(
     viewRefreshingToggle: (showProgress: boolean) => void,
     delayMs: number = DELAY_MS_DEFAULT,
-    minShowTime: number = MIN_SHOW_TIME_DEFAULT
+    minShowTime: number = MIN_SHOW_TIME_DEFAULT,
   ) {
     this.viewRefreshingToggle = viewRefreshingToggle;
     this.delayMs = delayMs;
@@ -57,17 +57,14 @@ export class ProgressTimeLatch {
     window.clearTimeout(this.delayedHideTimeoutId);
 
     if (value) {
-      this.delayedShowTimeoutId = window.setTimeout(
-        this.delayedShow,
-        this.delayMs
-      );
+      this.delayedShowTimeoutId = window.setTimeout(this.delayedShow, this.delayMs);
     } else if (this.showTime >= 0) {
       // We're already showing, lets check if we need to delay the hide
       const showTime = Date.now() - this.showTime;
       if (showTime < this.minShowTime) {
         this.delayedHideTimeoutId = window.setTimeout(
           this.delayedHide,
-          this.minShowTime - showTime
+          this.minShowTime - showTime,
         );
       } else {
         // We've been showing longer than the min, so hide and clean up

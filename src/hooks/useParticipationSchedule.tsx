@@ -1,18 +1,17 @@
-import { useRecoilValue } from "recoil";
-import { currentUserState } from "@/states/currentUser";
-import { useEffect, useState } from "react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { CurrentUser } from "@/types";
-import { Schedule } from "@/hooks/useSchedule";
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { Schedule } from '@/hooks/useSchedule';
+import { currentUserState } from '@/states/currentUser';
+import { CurrentUser } from '@/types';
 
 export function useParticipationSchedule() {
   const currentUser = useRecoilValue(currentUserState);
 
   const [isLoading, setLoading] = useState(false);
-  const [
-    participationSchedules,
-    setParticipationSchedules
-  ] = useState<any[] | null | undefined>(undefined);
+  const [participationSchedules, setParticipationSchedules] = useState<any[] | null | undefined>(
+    undefined,
+  );
   const [scheduleMessage, setScheduleMessage] = useState<string>();
   const [scheduleError, setScheduleError] = useState<Error>();
 
@@ -21,7 +20,7 @@ export function useParticipationSchedule() {
       setLoading(true);
 
       try {
-        const {data} = await supabaseClient
+        const { data } = await supabaseClient
           .from('member_participation_schedules')
           .select('*')
           .eq('member_id', user.userId);
@@ -48,12 +47,12 @@ export function useParticipationSchedule() {
 
   const participateIfNeeded = async (schedule: Schedule) => {
     if (!currentUser) {
-      setScheduleError(new Error('ユーザーが設定されていません。'))
+      setScheduleError(new Error('ユーザーが設定されていません。'));
       return;
     }
 
     try {
-      const {data: participated, error: participatedError} = await supabaseClient
+      const { data: participated, error: participatedError } = await supabaseClient
         .from('participation')
         .select('id', { count: 'exact' })
         .eq('schedule_id', schedule.id)
@@ -67,18 +66,16 @@ export function useParticipationSchedule() {
 
       const isParticipated = !!participated && participated.length;
       if (isParticipated) {
-        setScheduleError(new Error('既に参加登録済みです。'))
+        setScheduleError(new Error('既に参加登録済みです。'));
         return;
       }
 
-      const { error: participateError } = await supabaseClient
-        .from('participation')
-        .insert([
-          {
-            schedule_id: schedule.id,
-            member_id: currentUser.userId,
-          }
-        ]);
+      const { error: participateError } = await supabaseClient.from('participation').insert([
+        {
+          schedule_id: schedule.id,
+          member_id: currentUser.userId,
+        },
+      ]);
 
       if (!!participateError) {
         setScheduleError(new Error(participateError.message));
@@ -88,7 +85,7 @@ export function useParticipationSchedule() {
       const message = `${schedule.date.toLocaleDateString()} に参加登録しました🎉`;
 
       setScheduleMessage(message);
-    } catch(error) {
+    } catch (error) {
     } finally {
       setLoading(false);
     }

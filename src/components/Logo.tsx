@@ -1,14 +1,27 @@
-import React from "react";
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 export const Logo: React.FC<Props> = () => {
   return (
-    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-         x="0px" y="0px" width="410px" height="497px" viewBox="0 0 410 497" enableBackground="new 0 0 410 497"
+    <svg
+      version='1.1'
+      id='Layer_1'
+      xmlns='http://www.w3.org/2000/svg'
+      x='0px'
+      y='0px'
+      width='410px'
+      height='497px'
+      viewBox='0 0 410 497'
+      enableBackground='new 0 0 410 497'
     >
-      <image id="image0" width="410" height="497" x="0" y="0"
-             href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAHxCAYAAABUNXr6AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+      <image
+        id='image0'
+        width='410'
+        height='497'
+        x='0'
+        y='0'
+        href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAHxCAYAAABUNXr6AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAABJ
 AUlEQVR42u3deZhdV3nn++86+5waVKVZsmTLlifZlic84gnPs8HYBDAQDIGASZMOnXQ6Uzd05yad
 +3TnPvd27tDpJD2FzkRCEqaYMUAA2xgwNtjY2JbxjAdJlmXNqqpzzl73j7XLKsk1nHG/a+/z+zxP
@@ -339,7 +352,8 @@ UGfTi4gYSNNw1PSJwLH0+FRfH5ZQ/z8e7ra+0H5R0IiILGxPJextWU84PmCoF5/Uw3MO/nMT/pYS
 R1k/MhU6AGylhIeczUZBIyLSmaXD4aTbjU04ycFGQgNbAHxoJbPZwWYPT1Tgpamwcm0HAxIw0xQ0
 IiLdGSaEzlI/o3/kVDaiyT52U8LWMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiJywP8PdDx4HM+V
 OeoAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjItMDYtMjRUMjM6MjU6MjArMDA6MDAf2aW6AAAAJXRF
-WHRkYXRlOm1vZGlmeQAyMDIyLTA2LTI0VDIzOjI1OjIwKzAwOjAwboQdBgAAAABJRU5ErkJggg=="/>
+WHRkYXRlOm1vZGlmeQAyMDIyLTA2LTI0VDIzOjI1OjIwKzAwOjAwboQdBgAAAABJRU5ErkJggg=='
+      />
     </svg>
   );
-}
+};
