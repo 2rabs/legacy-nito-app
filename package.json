@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p ${PORT:-3210}",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p ${PORT:-3210}",
     "lint": "next lint --dir src",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write --ignore-path .gitignore './src/**/*.{js,jsx,ts,tsx,json}'",
