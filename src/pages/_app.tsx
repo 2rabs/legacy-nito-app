@@ -1,14 +1,14 @@
-import "../styles/globals.css";
+import '../styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
-import type { AppProps } from "next/app";
-import { UserProvider, useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
-import React, { useEffect } from "react";
-import { RecoilRoot, useSetRecoilState } from "recoil";
-import { currentUserState } from "@/states/currentUser";
-import { useRouter } from "next/router";
+import { UserProvider, useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
+import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { RecoilRoot, useSetRecoilState } from 'recoil';
 import { LayoutWrapper, LiffProvider } from '@/components';
-import { ToastContainer } from "react-toastify";
+import { currentUserState } from '@/states/currentUser';
 
 const AppInit = () => {
   const router = useRouter();
@@ -50,7 +50,7 @@ const AppInit = () => {
         await router.replace('/auth');
       }
     })();
-  }
+  };
 
   useEffect(effect, []);
   useEffect(effect, [authUser, isLoading]);
@@ -72,6 +72,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </UserProvider>
     </RecoilRoot>
   );
-}
+};
 
 export default MyApp;

@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useEffect, useState } from 'react';
 
 export type Schedule = {
   id: number;
   date: Date;
-}
+};
 
 export function useSchedule() {
-  const [ isLoading, setLoading ] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [latestSchedule, setLatestSchedule] = useState<Schedule>();
 
   useEffect(() => {

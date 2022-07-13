@@ -1,7 +1,7 @@
-import { useUser as useSupabaseUser } from "@supabase/auth-helpers-react";
-import { useEffect, useState } from "react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/router";
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 interface UserState {
   user: User | null;
@@ -19,10 +19,7 @@ const useUser: () => UserState = () => {
   const { user: authUser, error } = useSupabaseUser();
 
   const [user, setUser] = useState<User | null>(null);
-  const [
-    userParticipationSchedule,
-    setUserParticipationSchedule
-  ] = useState<any[] | null>(null);
+  const [userParticipationSchedule, setUserParticipationSchedule] = useState<any[] | null>(null);
 
   useEffect(() => {
     if (authUser) {
@@ -36,10 +33,7 @@ const useUser: () => UserState = () => {
     async function fetchProjectUser() {
       if (!authUser) return;
 
-      const {data} = await supabaseClient
-        .from('members')
-        .select('*')
-        .eq('uuid', authUser.id);
+      const { data } = await supabaseClient.from('members').select('*').eq('uuid', authUser.id);
 
       if (data) {
         const user = data[0];
@@ -60,7 +54,7 @@ const useUser: () => UserState = () => {
     async function fetchUserParticipationSchedule() {
       if (!user) return;
 
-      const {data} = await supabaseClient
+      const { data } = await supabaseClient
         .from('member_participation_schedule')
         .select('*')
         .eq('member_id', user.userId);
