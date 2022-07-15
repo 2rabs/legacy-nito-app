@@ -2,7 +2,8 @@ import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { TopContent, Head } from '@/components';
+import { TopContent } from '@/components';
+import { MainLayout } from "@/components/Layout";
 import { Schedule, useCurrentUser, useParticipationSchedule, useSchedule } from '@/hooks';
 import { ProgressTimeLatch } from '@/lib';
 
@@ -12,7 +13,7 @@ const HomeScreen: NextPage = () => {
     setShowProgress(showProgress);
   });
 
-  const { isAuthChecking, currentUser } = useCurrentUser();
+  const {isAuthChecking, currentUser} = useCurrentUser();
   const {
     isLoading: isParticipationScheduleLoading,
     participationSchedules,
@@ -21,16 +22,16 @@ const HomeScreen: NextPage = () => {
     scheduleError,
   } = useParticipationSchedule();
 
-  const { isLoading: isLatestScheduledDateLoading, latestSchedule } = useSchedule();
+  const {isLoading: isLatestScheduledDateLoading, latestSchedule} = useSchedule();
 
   useEffect(() => {
     if (!scheduleMessage) return;
-    toast(scheduleMessage, { type: 'success' });
+    toast(scheduleMessage, {type: 'success'});
   }, [scheduleMessage]);
 
   useEffect(() => {
     if (!scheduleError) return;
-    toast(scheduleError.message, { type: 'error' });
+    toast(scheduleError.message, {type: 'error'});
   }, [scheduleError]);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const HomeScreen: NextPage = () => {
 
   const resolveMessage: () => string | undefined = () => {
     return latestSchedule
-      ? `次回の開催日は ${latestSchedule.date.toLocaleDateString()} です。`
+      ? `次回の開催日は ${ latestSchedule.date.toLocaleDateString() } です。`
       : undefined;
   };
 
@@ -53,18 +54,19 @@ const HomeScreen: NextPage = () => {
   };
 
   return (
-    <>
-      <Head pageName={'Home'} />
-
-      <TopContent
-        showProgress={showProgress}
-        title='NITO'
-        latestSchedule={latestSchedule}
-        message={resolveMessage()}
-        onParticipateButtonClick={(latestSchedule) => onParticipateButtonClick(latestSchedule)}
-        onSignOutButtonClick={() => onSignOutButtonClick()}
-      />
-    </>
+    <MainLayout
+      title='Home'>
+      <main>
+        <TopContent
+          showProgress={ showProgress }
+          title='NITO'
+          latestSchedule={ latestSchedule }
+          message={ resolveMessage() }
+          onParticipateButtonClick={ (latestSchedule) => onParticipateButtonClick(latestSchedule) }
+          onSignOutButtonClick={ () => onSignOutButtonClick() }
+        />
+      </main>
+    </MainLayout>
   );
 };
 

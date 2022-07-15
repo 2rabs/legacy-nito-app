@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { RecoilRoot, useSetRecoilState } from 'recoil';
-import { LayoutWrapper, LiffProvider } from '@/components';
+import { LiffProvider } from '@/components';
 import { currentUserState } from '@/states/currentUser';
 
 const AppInit = () => {
@@ -63,11 +63,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <RecoilRoot>
       <UserProvider supabaseClient={supabaseClient}>
         <LiffProvider>
-          <LayoutWrapper>
-            <Component {...pageProps} />
-            <AppInit />
-            <ToastContainer />
-          </LayoutWrapper>
+          <Component {...pageProps} />
+          <AppInit />
+          <ToastContainer />
         </LiffProvider>
       </UserProvider>
     </RecoilRoot>
