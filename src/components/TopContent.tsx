@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProgressCircular } from '@/components';
+import { ProgressCircular } from '@/components/Elements';
 import { Schedule } from '@/hooks';
 
 type TopContentProps = {

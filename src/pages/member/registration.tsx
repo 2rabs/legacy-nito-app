@@ -5,7 +5,8 @@ import { useRouter } from 'next/router';
 import { instanceOf } from 'prop-types';
 import React, { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { ProgressCircular, useLiff } from '@/components';
+import { useLiff } from '@/components';
+import { ProgressCircular } from '@/components/Elements';
 
 const MemberRegistrationScreen: NextPage = () => {
   const { userId: lineId } = useLiff();
