@@ -1,5 +1,5 @@
-export type CurrentUser = {
-  userId: number;
-  lineId: string | null;
+export type Member = {
+  memberId: number;
+  lineId?: string;
   nickname: string;
 };

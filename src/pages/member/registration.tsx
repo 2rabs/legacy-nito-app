@@ -2,20 +2,23 @@ import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { instanceOf } from 'prop-types';
 import React, { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useLiff } from '@/components';
 import { ProgressCircular } from '@/components/Elements';
+import { useSetRecoilState } from 'recoil';
+import { memberState } from '@/states/member';
+import Link from 'next/link';
 
 const MemberRegistrationScreen: NextPage = () => {
-  const { userId: lineId } = useLiff();
+  const { userId: lineId, isInClient } = useLiff();
   const { user: authUser } = useSupabaseUser();
-  const router = useRouter();
+  const { push } = useRouter();
 
   const [nickname, setNickname] = useState('');
   const [isRegistering, setRegistering] = useState(false);
   const [error, setError] = useState<Error>();
+  const setCurrentMember = useSetRecoilState(memberState);
 
   useEffect(() => {
     if (!error) return;
@@ -37,13 +40,15 @@ const MemberRegistrationScreen: NextPage = () => {
       setRegistering(true);
 
       try {
-        const { error: registerError } = await supabaseClient.from('members').insert([
-          {
-            uuid: authUser.id,
-            line_id: lineId,
-            nickname: trimmedNickname,
-          },
-        ]);
+        const { data: members, error: registerError } = await supabaseClient
+          .from('members')
+          .insert([
+            {
+              uuid: authUser.id,
+              line_id: lineId,
+              nickname: trimmedNickname,
+            },
+          ]);
 
         console.log(registerError);
 
@@ -52,9 +57,20 @@ const MemberRegistrationScreen: NextPage = () => {
           return;
         }
 
+        const member = members[0];
+        if (!member) {
+          return;
+        }
+
+        setCurrentMember({
+          memberId: Number(member['id']),
+          lineId: member['line_id'],
+          nickname: member['nickname'],
+        });
+
         console.log('success');
         toast('メンバー登録が完了しました 🎉', { type: 'success' });
-        router.replace('/');
+        push('/dashboard');
       } catch (e) {
         if (e instanceof Error) {
           setError(new Error(e.message));
@@ -68,6 +84,20 @@ const MemberRegistrationScreen: NextPage = () => {
   const onSignOutButtonClick = () => {
     supabaseClient.auth.signOut();
   };
+
+  if (!isInClient) {
+    return (
+      <div className='flex flex-col justify-center items-center h-screen p-8'>
+        <p>LINE のブラウザ上で操作してください。</p>
+
+        <Link href='https://liff.line.me/1656946867-lAZJdX9R'>
+          <a className='flex mx-auto mt-16 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
+            LINE を開く
+          </a>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <>

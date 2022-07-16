@@ -1,59 +1,97 @@
 import '../styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
-import { UserProvider, useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
+import { UserProvider, useUser } from '@supabase/auth-helpers-react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { RecoilRoot, useSetRecoilState } from 'recoil';
+import { RecoilRoot, useRecoilState } from 'recoil';
 import { LiffProvider } from '@/components';
-import { currentUserState } from '@/states/currentUser';
+import { memberState } from '@/states/member';
 
-const AppInit = () => {
-  const router = useRouter();
-  const { user: authUser, isLoading } = useSupabaseUser();
-  const setCurrentUser = useSetRecoilState(currentUserState);
+const AppInit: React.FC = () => {
+  const { push, pathname } = useRouter();
+  const { user, isLoading } = useUser();
+  const [member, setCurrentMember] = useRecoilState(memberState);
 
-  const effect = () => {
-    (async function () {
-      if (isLoading) return;
+  const validateSession = async () => {
+    if (isLoading) return;
 
-      if (!authUser) {
-        setCurrentUser(null);
-        await router.replace('/');
-        return;
-      }
-
+    if (member && pathname === '/') {
+      push('/dashboard');
+    } else if (user && pathname !== '/member/registration') {
       try {
         const { data: member } = await supabaseClient
           .from('members')
           .select('*')
-          .eq('uuid', authUser.id)
-          .limit(1)
+          .eq('uuid', user.id)
           .single();
 
         if (!member) {
-          setCurrentUser(null);
-          await router.replace('/member/registration');
+          setCurrentMember(undefined);
+          await push('/member/registration');
           return;
         }
 
-        setCurrentUser({
-          userId: Number(member['id']),
+        setCurrentMember({
+          memberId: Number(member['id']),
           lineId: member['line_id'],
           nickname: member['nickname'],
         });
-        await router.replace('/dashboard');
+        await push('/dashboard');
       } catch {
-        setCurrentUser(null);
-        await router.replace('/');
+        setCurrentMember(undefined);
+        await push('/member/registration');
       }
-    })();
+    } else if (!user && pathname !== '/') {
+      await push('/');
+    }
   };
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && pathname === '/') {
+      const user = session?.user;
+      if (!user) {
+        push('/');
+        return;
+      }
 
-  useEffect(effect, []);
-  useEffect(effect, [authUser, isLoading]);
+      (async function () {
+        try {
+          const { data: member } = await supabaseClient
+            .from('members')
+            .select('*')
+            .eq('uuid', user.id)
+            .single();
+
+          if (!member) {
+            setCurrentMember(undefined);
+            await push('/member/registration');
+            return;
+          }
+
+          setCurrentMember({
+            memberId: Number(member['id']),
+            lineId: member['line_id'],
+            nickname: member['nickname'],
+          });
+          await push('/dashboard');
+        } catch {
+          setCurrentMember(undefined);
+          await push('/');
+        }
+      })();
+    }
+
+    if (event === 'SIGNED_OUT') {
+      setCurrentMember(undefined);
+      push('/');
+    }
+  });
+
+  useEffect(() => {
+    validateSession();
+  }, [isLoading]);
 
   return null;
 };
