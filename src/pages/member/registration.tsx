@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
 import { useLiff } from '@/components';
 import { ProgressCircular } from '@/components/Elements';
-import { memberState } from '@/states/member';
 import { MainLayout } from '@/components/Layout';
+import { memberState } from '@/states/member';
 
 const MemberRegistrationScreen: NextPage = () => {
   const { userId: lineId, isInClient } = useLiff();
@@ -88,20 +88,22 @@ const MemberRegistrationScreen: NextPage = () => {
 
   if (!isInClient) {
     return (
-      <div className='flex flex-col justify-center items-center h-screen p-8'>
-        <p>LINE のブラウザ上で操作してください。</p>
+      <MainLayout title='Registration'>
+        <div className='flex flex-col justify-center items-center h-screen p-8'>
+          <p>LINE のブラウザ上で操作してください。</p>
 
-        <Link href='https://liff.line.me/1656946867-lAZJdX9R'>
-          <a className='flex mx-auto mt-16 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
-            LINE を開く
-          </a>
-        </Link>
-      </div>
+          <Link href='https://liff.line.me/1656946867-lAZJdX9R'>
+            <a className='flex mx-auto mt-16 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
+              LINE を開く
+            </a>
+          </Link>
+        </div>
+      </MainLayout>
     );
   }
 
   return (
-    <MainLayout>
+    <MainLayout title='Registration'>
       <section>
         <div className='flex flex-col justify-center min- py-12 sm:px-6 lg:px-8'>
           <div className='sm:mx-auto sm:w-full sm:max-w-md'>
