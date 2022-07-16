@@ -21,7 +21,7 @@ const AppInit = () => {
 
       if (!authUser) {
         setCurrentUser(null);
-        await router.replace('/auth');
+        await router.replace('/');
         return;
       }
 
@@ -44,10 +44,10 @@ const AppInit = () => {
           lineId: member['line_id'],
           nickname: member['nickname'],
         });
-        await router.replace('/');
+        await router.replace('/dashboard');
       } catch {
         setCurrentUser(null);
-        await router.replace('/auth');
+        await router.replace('/');
       }
     })();
   };
