@@ -1,73 +1,28 @@
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
-import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { TopContent } from '@/components';
-import { MainLayout } from "@/components/Layout";
-import { Schedule, useCurrentUser, useParticipationSchedule, useSchedule } from '@/hooks';
-import { ProgressTimeLatch } from '@/lib';
+import { useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
+import { Auth } from '@supabase/ui';
+import { NextPage } from 'next';
+import { MainLayout } from '@/components/Layout';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
+import styles from '@/styles/Home.module.css';
 
-const HomeScreen: NextPage = () => {
-  const [showProgress, setShowProgress] = useState(false);
-  const progressTimeLatch = new ProgressTimeLatch((showProgress: boolean) => {
-    setShowProgress(showProgress);
-  });
-
-  const {isAuthChecking, currentUser} = useCurrentUser();
-  const {
-    isLoading: isParticipationScheduleLoading,
-    participationSchedules,
-    participateIfNeeded,
-    scheduleMessage,
-    scheduleError,
-  } = useParticipationSchedule();
-
-  const {isLoading: isLatestScheduledDateLoading, latestSchedule} = useSchedule();
-
-  useEffect(() => {
-    if (!scheduleMessage) return;
-    toast(scheduleMessage, {type: 'success'});
-  }, [scheduleMessage]);
-
-  useEffect(() => {
-    if (!scheduleError) return;
-    toast(scheduleError.message, {type: 'error'});
-  }, [scheduleError]);
-
-  useEffect(() => {
-    progressTimeLatch.loading =
-      isAuthChecking && isParticipationScheduleLoading && isLatestScheduledDateLoading;
-  }, [isAuthChecking, isParticipationScheduleLoading, isLatestScheduledDateLoading]);
-
-  const resolveMessage: () => string | undefined = () => {
-    return latestSchedule
-      ? `次回の開催日は ${ latestSchedule.date.toLocaleDateString() } です。`
-      : undefined;
-  };
-
-  const onParticipateButtonClick = (latestSchedule: Schedule) => {
-    participateIfNeeded(latestSchedule);
-  };
-
-  const onSignOutButtonClick = () => {
-    supabaseClient.auth.signOut();
-  };
+const AuthScreen: NextPage = () => {
+  const { isAuthChecking, currentUser } = useCurrentUser();
+  const { user: authUser, error } = useSupabaseUser();
 
   return (
-    <MainLayout
-      title='Home'>
-      <main>
-        <TopContent
-          showProgress={ showProgress }
-          title='NITO'
-          latestSchedule={ latestSchedule }
-          message={ resolveMessage() }
-          onParticipateButtonClick={ (latestSchedule) => onParticipateButtonClick(latestSchedule) }
-          onSignOutButtonClick={ () => onSignOutButtonClick() }
+    <MainLayout title='Auth'>
+      <main className={styles.main}>
+        <Auth
+          supabaseClient={supabaseClient}
+          // providers={ ['google'] }
+          socialLayout='horizontal'
+          socialButtonSize='xlarge'
+          // view='magic_link'
         />
       </main>
     </MainLayout>
   );
 };
 
-export default HomeScreen;
+export default AuthScreen;
