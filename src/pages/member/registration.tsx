@@ -9,6 +9,7 @@ import { useSetRecoilState } from 'recoil';
 import { useLiff } from '@/components';
 import { ProgressCircular } from '@/components/Elements';
 import { memberState } from '@/states/member';
+import { MainLayout } from '@/components/Layout';
 
 const MemberRegistrationScreen: NextPage = () => {
   const { userId: lineId, isInClient } = useLiff();
@@ -100,7 +101,7 @@ const MemberRegistrationScreen: NextPage = () => {
   }
 
   return (
-    <>
+    <MainLayout>
       <section>
         <div className='flex flex-col justify-center min- py-12 sm:px-6 lg:px-8'>
           <div className='sm:mx-auto sm:w-full sm:max-w-md'>
@@ -155,7 +156,7 @@ const MemberRegistrationScreen: NextPage = () => {
       </button>
 
       <ProgressCircular isVisible={isRegistering} />
-    </>
+    </MainLayout>
   );
 };
 
