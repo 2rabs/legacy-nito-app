@@ -505,7 +505,7 @@
     "@liff/logger" "2.20.3"
     "@liff/util" "2.20.3"
 
-"@line/bot-sdk@^7.0.0":
+"@line/bot-sdk@^7.0.0", "@line/bot-sdk@^7.5.0":
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/@line/bot-sdk/-/bot-sdk-7.5.0.tgz#db280e7733bcf990deb893646ba12d4d76b67c85"
   integrity sha512-1PQW/tlg13olH93Ue+X4LwD4JvTK7JR5k59z2xM/rNNKWINbCigBgvwB0lwqnpQmehN7EvxolkN2aEPoSQ+JGw==
