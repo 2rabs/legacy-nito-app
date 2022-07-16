@@ -1,12 +1,14 @@
 import { useRecoilValue } from 'recoil';
-import { currentUserState } from '@/states/currentUser';
+import { memberState } from '@/states/member';
 
 export function useCurrentUser() {
-  const currentUser = useRecoilValue(currentUserState);
-  const isAuthChecking = currentUser === undefined;
+  const currentUser = useRecoilValue(memberState);
+  const isRegistered = currentUser !== undefined;
+  const isNotRegistered = !isRegistered;
 
   return {
     currentUser,
-    isAuthChecking,
+    isRegistered: isRegistered,
+    isNotRegistered,
   };
 }

@@ -4,12 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { TopContent } from '@/components';
 import { MainLayout } from '@/components/Layout';
-import { Schedule, useCurrentUser, useParticipationSchedule, useSchedule } from '@/hooks';
+import { Schedule, useParticipationSchedule, useSchedule } from '@/hooks';
 
 const DashboardScreen: NextPage = () => {
   const [showProgress, setShowProgress] = useState(false);
 
-  const { isAuthChecking, currentUser } = useCurrentUser();
   const {
     isLoading: isParticipationScheduleLoading,
     participationSchedules,
@@ -31,10 +30,9 @@ const DashboardScreen: NextPage = () => {
   }, [scheduleError]);
 
   useEffect(() => {
-    const isLoading =
-      isAuthChecking || isParticipationScheduleLoading || isLatestScheduledDateLoading;
+    const isLoading = isParticipationScheduleLoading || isLatestScheduledDateLoading;
     setShowProgress(isLoading);
-  }, [isAuthChecking, isParticipationScheduleLoading, isLatestScheduledDateLoading]);
+  }, [isParticipationScheduleLoading, isLatestScheduledDateLoading]);
 
   const resolveMessage: () => string | undefined = () => {
     return latestSchedule

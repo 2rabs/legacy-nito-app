@@ -6,6 +6,7 @@ declare type LiffState = {
   userId: string | undefined;
   nickname: string | undefined;
   email: string | undefined;
+  isInClient: boolean;
   error?: Error;
 };
 
@@ -24,6 +25,7 @@ export const LiffProvider = (props: Props) => {
   const [userId, setUserId] = useState<string | undefined>(undefined);
   const [nickname, setNickname] = useState<string | undefined>(undefined);
   const [email, setEmail] = useState<string | undefined>(undefined);
+  const [isInClient, setIsInClient] = useState(false);
 
   useEffect(() => {
     import('@line/liff')
@@ -44,6 +46,8 @@ export const LiffProvider = (props: Props) => {
               setEmail(payload.email);
             }
 
+            setIsInClient(liff.isInClient);
+
             liff.getProfile().then((profile) => {
               setUserId(profile.userId);
               setNickname(profile.displayName);
@@ -61,6 +65,7 @@ export const LiffProvider = (props: Props) => {
     userId,
     nickname,
     email,
+    isInClient,
     liffError,
   };
   return (

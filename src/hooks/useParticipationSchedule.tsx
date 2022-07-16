@@ -2,11 +2,11 @@ import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Schedule } from '@/hooks/useSchedule';
-import { currentUserState } from '@/states/currentUser';
-import { CurrentUser } from '@/types';
+import { memberState } from '@/states/member';
+import { Member } from '@/types';
 
 export function useParticipationSchedule() {
-  const currentUser = useRecoilValue(currentUserState);
+  const currentUser = useRecoilValue(memberState);
 
   const [isLoading, setLoading] = useState(false);
   const [participationSchedules, setParticipationSchedules] = useState<any[] | null | undefined>(
@@ -16,14 +16,14 @@ export function useParticipationSchedule() {
   const [scheduleError, setScheduleError] = useState<Error>();
 
   useEffect(() => {
-    async function fetchUserParticipationSchedule(user: CurrentUser) {
+    async function fetchUserParticipationSchedule(user: Member) {
       setLoading(true);
 
       try {
         const { data } = await supabaseClient
           .from('member_participation_schedules')
           .select('*')
-          .eq('member_id', user.userId);
+          .eq('member_id', user.memberId);
 
         setParticipationSchedules(data);
       } catch {
@@ -56,7 +56,7 @@ export function useParticipationSchedule() {
         .from('participation')
         .select('id', { count: 'exact' })
         .eq('schedule_id', schedule.id)
-        .eq('member_id', currentUser.userId)
+        .eq('member_id', currentUser.memberId)
         .limit(1);
 
       if (!!participatedError) {
@@ -73,7 +73,7 @@ export function useParticipationSchedule() {
       const { error: participateError } = await supabaseClient.from('participation').insert([
         {
           schedule_id: schedule.id,
-          member_id: currentUser.userId,
+          member_id: currentUser.memberId,
         },
       ]);
 
