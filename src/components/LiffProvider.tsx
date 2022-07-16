@@ -41,6 +41,8 @@ export const LiffProvider = (props: Props) => {
             setLiffObject(liff);
 
             setIsLoggedIn(liff.isLoggedIn);
+            setIsInClient(liff.isInClient);
+
             if (!liff.isLoggedIn()) return;
 
             const payload = liff.getDecodedIDToken();
@@ -48,8 +50,6 @@ export const LiffProvider = (props: Props) => {
             if (payload) {
               setEmail(payload.email);
             }
-
-            setIsInClient(liff.isInClient);
 
             liff.getProfile().then((profile) => {
               setUserId(profile.userId);

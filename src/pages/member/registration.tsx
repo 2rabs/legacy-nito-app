@@ -1,17 +1,17 @@
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useSetRecoilState } from 'recoil';
 import { useLiff } from '@/components';
 import { ProgressCircular } from '@/components/Elements';
-import { useSetRecoilState } from 'recoil';
 import { memberState } from '@/states/member';
-import Link from 'next/link';
 
 const MemberRegistrationScreen: NextPage = () => {
-  const { userId: lineId, isLoggedIn } = useLiff();
+  const { userId: lineId, isInClient } = useLiff();
   const { user: authUser } = useSupabaseUser();
   const { push } = useRouter();
 
@@ -85,7 +85,7 @@ const MemberRegistrationScreen: NextPage = () => {
     supabaseClient.auth.signOut();
   };
 
-  if (!isLoggedIn) {
+  if (!isInClient) {
     return (
       <div className='flex flex-col justify-center items-center h-screen p-8'>
         <p>LINE のブラウザ上で操作してください。</p>
