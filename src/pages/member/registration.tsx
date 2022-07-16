@@ -11,7 +11,7 @@ import { memberState } from '@/states/member';
 import Link from 'next/link';
 
 const MemberRegistrationScreen: NextPage = () => {
-  const { userId: lineId, isInClient } = useLiff();
+  const { userId: lineId, isLoggedIn } = useLiff();
   const { user: authUser } = useSupabaseUser();
   const { push } = useRouter();
 
@@ -85,7 +85,7 @@ const MemberRegistrationScreen: NextPage = () => {
     supabaseClient.auth.signOut();
   };
 
-  if (!isInClient) {
+  if (!isLoggedIn) {
     return (
       <div className='flex flex-col justify-center items-center h-screen p-8'>
         <p>LINE のブラウザ上で操作してください。</p>

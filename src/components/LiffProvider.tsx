@@ -6,6 +6,7 @@ declare type LiffState = {
   userId: string | undefined;
   nickname: string | undefined;
   email: string | undefined;
+  isLoggedIn: boolean;
   isInClient: boolean;
   error?: Error;
 };
@@ -25,6 +26,7 @@ export const LiffProvider = (props: Props) => {
   const [userId, setUserId] = useState<string | undefined>(undefined);
   const [nickname, setNickname] = useState<string | undefined>(undefined);
   const [email, setEmail] = useState<string | undefined>(undefined);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isInClient, setIsInClient] = useState(false);
 
   useEffect(() => {
@@ -38,6 +40,7 @@ export const LiffProvider = (props: Props) => {
             console.log('LIFF init succeeded.');
             setLiffObject(liff);
 
+            setIsLoggedIn(liff.isLoggedIn);
             if (!liff.isLoggedIn()) return;
 
             const payload = liff.getDecodedIDToken();
@@ -65,6 +68,7 @@ export const LiffProvider = (props: Props) => {
     userId,
     nickname,
     email,
+    isLoggedIn,
     isInClient,
     liffError,
   };
