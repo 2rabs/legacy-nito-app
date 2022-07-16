@@ -5,13 +5,9 @@ import { toast } from 'react-toastify';
 import { TopContent } from '@/components';
 import { MainLayout } from '@/components/Layout';
 import { Schedule, useCurrentUser, useParticipationSchedule, useSchedule } from '@/hooks';
-import { ProgressTimeLatch } from '@/lib';
 
 const DashboardScreen: NextPage = () => {
   const [showProgress, setShowProgress] = useState(false);
-  const progressTimeLatch = new ProgressTimeLatch((showProgress: boolean) => {
-    setShowProgress(showProgress);
-  });
 
   const { isAuthChecking, currentUser } = useCurrentUser();
   const {
@@ -35,8 +31,9 @@ const DashboardScreen: NextPage = () => {
   }, [scheduleError]);
 
   useEffect(() => {
-    progressTimeLatch.loading =
-      isAuthChecking && isParticipationScheduleLoading && isLatestScheduledDateLoading;
+    const isLoading =
+      isAuthChecking || isParticipationScheduleLoading || isLatestScheduledDateLoading;
+    setShowProgress(isLoading);
   }, [isAuthChecking, isParticipationScheduleLoading, isLatestScheduledDateLoading]);
 
   const resolveMessage: () => string | undefined = () => {
