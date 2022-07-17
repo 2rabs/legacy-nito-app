@@ -67,6 +67,7 @@ const MemberRegistrationScreen: NextPage = () => {
           memberId: Number(member['id']),
           lineId: member['line_id'],
           nickname: member['nickname'],
+          role: member['role'],
         });
 
         console.log('success');
