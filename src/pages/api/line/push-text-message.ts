@@ -11,17 +11,29 @@ type Message = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Message>) {
-  if (req.body.secret !== process.env.WEBHOOK_JUMPOWER_TWEET_SECRET) {
+  if (req.body.secret !== process.env.API_TOKEN) {
     return res.status(401).json({ message: 'Your secret is invalid !' });
+  }
+
+  const lineId = req.body.lineId;
+  const messageText = req.body.messageText ?? '';
+  const notificationDisabled = req.body.notificationDisabled ?? false;
+
+  if (!lineId) {
+    return res.status(401).json({ message: 'LineId is required !' });
   }
 
   const client = new LineBotClient(config);
 
   try {
-    await client.pushMessage(process.env.LINE_ADMIN_GROUP_ID!, {
-      type: 'text',
-      text: `ジャンパワーの新しいツイートを受信しました。\n\n${req.body.tweet.text}\n\n${req.body.tweet.linkToTweet}`,
-    });
+    await client.pushMessage(
+      lineId,
+      {
+        type: 'text',
+        text: messageText,
+      },
+      notificationDisabled,
+    );
   } catch (err) {
     console.log(err);
   }

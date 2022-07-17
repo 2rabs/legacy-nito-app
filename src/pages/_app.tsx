@@ -38,6 +38,7 @@ const AppInit: React.FC = () => {
           memberId: Number(member['id']),
           lineId: member['line_id'],
           nickname: member['nickname'],
+          role: member['role'],
         });
         await push('/dashboard');
       } catch {
@@ -74,6 +75,7 @@ const AppInit: React.FC = () => {
             memberId: Number(member['id']),
             lineId: member['line_id'],
             nickname: member['nickname'],
+            role: member['role'],
           });
           await push('/dashboard');
         } catch {
