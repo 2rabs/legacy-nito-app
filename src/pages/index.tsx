@@ -10,10 +10,8 @@ const AuthScreen: NextPage = () => {
       <main className={styles.main}>
         <Auth
           supabaseClient={supabaseClient}
-          // providers={ ['google'] }
           socialLayout='horizontal'
           socialButtonSize='xlarge'
-          // view='magic_link'
         />
       </main>
     </MainLayout>
