@@ -5,7 +5,6 @@
 html,
 body {
     user-select: none;
-    height: 100vh;
 }
 
 @supports (-webkit-touch-callout: none) {
