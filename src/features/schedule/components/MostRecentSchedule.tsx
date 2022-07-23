@@ -53,8 +53,8 @@ export const MostRecentSchedule: React.FC<Props> = ({}: Props) => {
   }
 
   return (
-    <div className='flex flex-wrap w-full flex-col items-center text-center py-8'>
-      <p className='lg:w-1/2 w-full leading-relaxed text-gray-500'>{`次回の開催日は ${mostRecentSchedule.date.toLocaleDateString()} です。`}</p>
+    <div className='flex w-full flex-col flex-wrap items-center py-8 text-center'>
+      <p className='w-full leading-relaxed text-gray-500 lg:w-1/2'>{`次回の開催日は ${mostRecentSchedule.date.toLocaleDateString()} です。`}</p>
 
       <form
         className='my-4'
@@ -62,7 +62,7 @@ export const MostRecentSchedule: React.FC<Props> = ({}: Props) => {
       >
         <label
           htmlFor='comment'
-          className='block text-sm font-medium text-gray-700 py-8'
+          className='block py-8 text-sm font-medium text-gray-700'
         >
           参加コメント
           <input
@@ -73,10 +73,10 @@ export const MostRecentSchedule: React.FC<Props> = ({}: Props) => {
             pattern='.*\S+.*'
             value={comment}
             onChange={(event) => onCommentChanged(event)}
-            className='mt-1 block w-full px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300'
+            className='mt-1 block w-full rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 transition duration-500 ease-in-out placeholder:text-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300'
           />
         </label>
-        <button className='bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded'>
+        <button className='rounded border border-indigo-500 bg-transparent py-2 px-4 font-semibold text-indigo-700 hover:border-transparent hover:bg-indigo-500 hover:text-white'>
           参加する
         </button>
       </form>

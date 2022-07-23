@@ -90,11 +90,11 @@ const MemberRegistrationScreen: NextPage = () => {
   if (!isInClient) {
     return (
       <MainLayout title='Registration'>
-        <div className='flex flex-col justify-center items-center h-screen p-8'>
+        <div className='flex h-screen flex-col items-center justify-center p-8'>
           <p>LINE のブラウザ上で操作してください。</p>
 
           <Link href='https://liff.line.me/1656946867-lAZJdX9R'>
-            <a className='flex mx-auto mt-16 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
+            <a className='mx-auto mt-16 flex rounded border-0 bg-indigo-500 py-2 px-8 text-lg text-white hover:bg-indigo-600 focus:outline-none'>
               LINE を開く
             </a>
           </Link>
@@ -106,16 +106,16 @@ const MemberRegistrationScreen: NextPage = () => {
   return (
     <MainLayout title='Registration'>
       <section>
-        <div className='flex flex-col justify-center min- py-12 sm:px-6 lg:px-8'>
+        <div className='min- flex flex-col justify-center py-12 sm:px-6 lg:px-8'>
           <div className='sm:mx-auto sm:w-full sm:max-w-md'>
-            <h2 className='mt-6 text-3xl font-extrabold text-center text-neutral-600'>
+            <h2 className='mt-6 text-center text-3xl font-extrabold text-neutral-600'>
               メンバー登録
             </h2>
           </div>
 
           <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
             <form
-              className='px-4 py-8 sm:px-10 space-y-6'
+              className='space-y-6 px-4 py-8 sm:px-10'
               onSubmit={(event) => onSubmit(event)}
             >
               <label
@@ -136,13 +136,13 @@ const MemberRegistrationScreen: NextPage = () => {
                   title='空白以外の文字列を入力してください。'
                   value={nickname}
                   onChange={(event) => onChangeNickname(event.target.value)}
-                  className='mt-1 block w-full px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300'
+                  className='mt-1 block w-full rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 transition duration-500 ease-in-out placeholder:text-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300'
                 />
               </label>
 
               <button
                 type='submit'
-                className='flex mx-auto mt-16 items-center justify-center w-full text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg'
+                className='mx-auto mt-16 flex w-full items-center justify-center rounded border-0 bg-indigo-500 py-2 px-8 text-lg text-white hover:bg-indigo-600 focus:outline-none'
               >
                 メンバー登録して利用を始める
               </button>
@@ -152,7 +152,7 @@ const MemberRegistrationScreen: NextPage = () => {
       </section>
 
       <button
-        className='flex mx-auto mt-16 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg'
+        className='mx-auto mt-16 flex rounded border-0 bg-indigo-500 py-2 px-8 text-lg text-white hover:bg-indigo-600 focus:outline-none'
         onClick={() => onSignOutButtonClick()}
       >
         サインアウト
