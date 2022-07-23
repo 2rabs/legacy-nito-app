@@ -1,0 +1,108 @@
+import { Client as LineBotClient, WebhookEvent } from '@line/bot-sdk';
+import { MessageEvent, TextEventMessage, User, WebhookRequestBody } from '@line/bot-sdk/lib/types';
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+const config = {
+  channelAccessToken: process.env.LINE_MESSAGING_CHANNEL_TOKEN!,
+  channelSecret: process.env.LINE_MESSAGING_CHANNEL_SECRET!,
+};
+
+type Message = {
+  message: string;
+};
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Message>) {
+  console.log(JSON.stringify(req.body));
+
+  const createSuccessResponse = () => {
+    res.json({
+      message: 'OK',
+    });
+  };
+
+  const validationResult = validate(req.body);
+  if (validationResult.type === 'error') {
+    createSuccessResponse();
+    return;
+  }
+  console.log(validationResult);
+
+  const { user, message } = validationResult;
+
+  const { data: member, error: searchMemberError } = await supabaseClient
+    .from('members')
+    .select('id, nickname')
+    .eq('line_id', user.userId)
+    .single();
+
+  console.log(member);
+
+  if (searchMemberError) {
+    createSuccessResponse();
+    return;
+  }
+
+  const { error: insertMessageError } = await supabaseClient.from('messages').insert({
+    member_id: member.id,
+    message: message.text,
+  });
+
+  console.log(insertMessageError);
+
+  if (insertMessageError) {
+    createSuccessResponse();
+    return;
+  }
+
+  res.json({
+    message: 'OK',
+  });
+}
+
+type BaseValidationResult = {
+  type: 'ok' | 'error';
+};
+
+type ValidationResult = ValidationResultOk | ValidationResultError;
+
+type ValidationResultOk = {
+  type: 'ok';
+  user: User;
+  message: TextEventMessage;
+} & BaseValidationResult;
+
+type ValidationResultError = {
+  type: 'error';
+} & BaseValidationResult;
+
+const validate: (body: WebhookRequestBody) => ValidationResult = (body) => {
+  const firstMessageEvent = body.events.find((event: WebhookEvent) => event.type === 'message');
+
+  // NOTE: メッセージイベント以外の場合は何もしない
+  if (!firstMessageEvent) {
+    return {
+      type: 'error',
+    };
+  }
+
+  const messageEvent = firstMessageEvent as MessageEvent;
+  // 送信者がユーザー以外の場合
+  if (messageEvent.source.type !== 'user') {
+    return {
+      type: 'error',
+    };
+  }
+  // メッセージタイプがテキスト以外の場合
+  if (messageEvent.message.type !== 'text') {
+    return {
+      type: 'error',
+    };
+  }
+
+  return {
+    type: 'ok',
+    user: messageEvent.source,
+    message: messageEvent.message,
+  };
+};
