@@ -11,15 +11,19 @@ import { LiffProvider } from '@/components';
 import { memberState } from '@/states/member';
 
 const AppInit: React.FC = () => {
-  const { push, pathname } = useRouter();
+  const { push, replace, pathname } = useRouter();
   const { user, isLoading } = useUser();
   const [member, setCurrentMember] = useRecoilState(memberState);
 
   const validateSession = async () => {
     if (isLoading) return;
 
-    if (member && pathname === '/') {
-      push('/dashboard');
+    const isRequireMemberScreen = pathname === '/dashboard';
+    const isRequireAuthScreen = isRequireMemberScreen || pathname === '/member/registration';
+    const isEveryoneScreen = pathname === '/' || pathname === '/auth';
+
+    if (member && isEveryoneScreen) {
+      replace('/dashboard');
     } else if (user && pathname !== '/member/registration') {
       try {
         const { data: member } = await supabaseClient
@@ -30,7 +34,7 @@ const AppInit: React.FC = () => {
 
         if (!member) {
           setCurrentMember(undefined);
-          await push('/member/registration');
+          await replace('/member/registration');
           return;
         }
 
@@ -40,20 +44,21 @@ const AppInit: React.FC = () => {
           nickname: member['nickname'],
           role: member['role'],
         });
-        await push('/dashboard');
+        await replace('/dashboard');
       } catch {
         setCurrentMember(undefined);
-        await push('/member/registration');
+        await replace('/member/registration');
       }
-    } else if (!user && pathname !== '/') {
-      await push('/');
+    } else if (!user && isRequireAuthScreen) {
+      await push('/auth');
     }
   };
+
   supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && pathname === '/') {
+    if (event === 'SIGNED_IN' && pathname === '/auth') {
       const user = session?.user;
       if (!user) {
-        push('/');
+        replace('/auth');
         return;
       }
 
@@ -80,14 +85,14 @@ const AppInit: React.FC = () => {
           await push('/dashboard');
         } catch {
           setCurrentMember(undefined);
-          await push('/');
+          await push('/auth');
         }
       })();
     }
 
     if (event === 'SIGNED_OUT') {
       setCurrentMember(undefined);
-      push('/');
+      push('/auth');
     }
   });
 
