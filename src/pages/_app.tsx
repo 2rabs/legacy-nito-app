@@ -18,12 +18,14 @@ const AppInit: React.FC = () => {
   const validateSession = async () => {
     if (isLoading) return;
 
-    const isRequireMemberScreen = pathname === '/dashboard';
+    const isRequireMemberScreen = pathname === '/dashboard' || pathname === '/that-day';
     const isRequireAuthScreen = isRequireMemberScreen || pathname === '/member/registration';
     const isEveryoneScreen = pathname === '/' || pathname === '/auth';
 
-    if (member && isEveryoneScreen) {
-      replace('/dashboard');
+    if (member) {
+      if (isEveryoneScreen) {
+        replace('/dashboard');
+      }
     } else if (user && pathname !== '/member/registration') {
       try {
         const { data: member } = await supabaseClient
@@ -44,7 +46,6 @@ const AppInit: React.FC = () => {
           nickname: member['nickname'],
           role: member['role'],
         });
-        await replace('/dashboard');
       } catch {
         setCurrentMember(undefined);
         await replace('/member/registration');
