@@ -2,16 +2,19 @@ import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Auth } from '@supabase/ui';
 import { NextPage } from 'next';
 import { MainLayout } from '@/components/Layout';
-import { TopHero } from '@/features/top';
 
-const TopScreen: NextPage = () => {
+const AuthScreen: NextPage = () => {
   return (
-    <MainLayout>
+    <MainLayout title='Auth'>
       <main>
-        <TopHero />
+        <Auth
+          supabaseClient={supabaseClient}
+          socialLayout='horizontal'
+          socialButtonSize='xlarge'
+        />
       </main>
     </MainLayout>
   );
 };
 
-export default TopScreen;
+export default AuthScreen;
