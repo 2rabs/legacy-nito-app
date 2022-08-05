@@ -38,6 +38,7 @@ export const useMutableMostRecentSchedule: () => MutableMostRecentScheduleState 
           .gt('date', new Date().toISOString())
           .is('deleted_at', null)
           .order('date', { ascending: true })
+          .limit(1)
           .single();
 
         if (!mostRecentSchedule) {
