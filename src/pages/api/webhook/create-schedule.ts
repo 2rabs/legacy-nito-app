@@ -6,14 +6,15 @@ type Message = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Message>) {
-  if (req.body.secret !== process.env.WEBHOOK_JUMPOWER_TWEET_SECRET) {
+  console.log(req.headers.authorization);
+  if (req.headers.authorization !== `Bearer ${process.env.WEBHOOK_SUPABASE_TABLE_SECRET}`) {
     return res.status(401).json({ message: 'Your secret is invalid !' });
   }
 
   try {
-    await lineBotClient.pushMessage(process.env.LINE_ADMIN_GROUP_ID!, {
+    await lineBotClient.broadcast({
       type: 'text',
-      text: `ジャンパワーの新しいツイートを受信しました。\n\n${req.body.tweet.text}\n\n${req.body.tweet.linkToTweet}`,
+      text: `次回は ${req.body.record.date} です。\n参加希望の方は LIFF アプリから参加登録をお願いします 🙌`,
     });
   } catch (err) {
     console.log(err);
