@@ -1,14 +1,14 @@
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Auth } from '@supabase/ui';
 import { NextPage } from 'next';
 import { MainLayout } from '@/components/Layout';
+import { supabase } from '@/lib/supabaseClient';
 
 const AuthScreen: NextPage = () => {
   return (
     <MainLayout title='Auth'>
       <main>
         <Auth
-          supabaseClient={supabaseClient}
+          supabaseClient={supabase}
           socialLayout='horizontal'
           socialButtonSize='xlarge'
         />

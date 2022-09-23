@@ -20,6 +20,7 @@
     "@supabase/auth-helpers-react": "^0.2.4",
     "@supabase/supabase-js": "^1.35.6",
     "@supabase/ui": "^0.36.5",
+    "daisyui": "^2.31.0",
     "date-fns": "^2.29.3",
     "next": "12.3.0",
     "react": "18.2.0",

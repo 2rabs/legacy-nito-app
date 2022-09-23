@@ -1,8 +1,8 @@
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Schedule } from '@/features/schedule';
-import { memberState } from '@/states/member';
+import { supabase } from '@/lib/supabaseClient';
+import { memberState } from '@/stores/member';
 
 interface ParticipateResult {
   type: 'success' | 'error';
@@ -32,7 +32,7 @@ export const useMutableMostRecentSchedule: () => MutableMostRecentScheduleState 
       setLoading(true);
 
       try {
-        const { data: mostRecentSchedule } = await supabaseClient
+        const { data: mostRecentSchedule } = await supabase
           .from('schedules')
           .select('id, date')
           .gt('date', new Date().toISOString())
@@ -63,7 +63,7 @@ export const useMutableMostRecentSchedule: () => MutableMostRecentScheduleState 
     if (!member) return;
 
     try {
-      const { data: participated, error: participatedError } = await supabaseClient
+      const { data: participated, error: participatedError } = await supabase
         .from('participation')
         .select('id', { count: 'exact' })
         .eq('schedule_id', schedule.id)
@@ -80,7 +80,7 @@ export const useMutableMostRecentSchedule: () => MutableMostRecentScheduleState 
         return;
       }
 
-      const { error: participateError } = await supabaseClient.from('participation').insert([
+      const { error: participateError } = await supabase.from('participation').insert([
         {
           schedule_id: schedule.id,
           member_id: member.memberId,

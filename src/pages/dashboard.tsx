@@ -1,12 +1,12 @@
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import type { NextPage } from 'next';
 import React from 'react';
 import { MainLayout } from '@/components/Layout';
 import { MostRecentSchedule } from '@/features/schedule';
+import { supabase } from '@/lib/supabaseClient';
 
 const DashboardScreen: NextPage = () => {
   const onSignOutButtonClick = () => {
-    supabaseClient.auth.signOut();
+    supabase.auth.signOut();
   };
 
   return (

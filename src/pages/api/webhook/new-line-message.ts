@@ -1,12 +1,7 @@
-import { Client as LineBotClient, WebhookEvent } from '@line/bot-sdk';
+import { WebhookEvent } from '@line/bot-sdk';
 import { MessageEvent, TextEventMessage, User, WebhookRequestBody } from '@line/bot-sdk/lib/types';
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-const config = {
-  channelAccessToken: process.env.LINE_MESSAGING_CHANNEL_TOKEN!,
-  channelSecret: process.env.LINE_MESSAGING_CHANNEL_SECRET!,
-};
+import { supabase } from '@/lib/supabaseClient';
 
 type Message = {
   message: string;
@@ -30,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const { user, message } = validationResult;
 
-  const { data: member, error: searchMemberError } = await supabaseClient
+  const { data: member, error: searchMemberError } = await supabase
     .from('members')
     .select('id, nickname')
     .eq('line_id', user.userId)
@@ -43,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     return;
   }
 
-  const { error: insertMessageError } = await supabaseClient.from('messages').insert({
+  const { error: insertMessageError } = await supabase.from('messages').insert({
     member_id: member.id,
     message: message.text,
   });

@@ -1,7 +1,7 @@
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useLiff } from '@/components';
 import { AuthType } from '@/features/auth';
+import { supabase } from '@/lib/supabaseClient';
 
 interface MutableAuthProps {
   type: AuthType;
@@ -34,7 +34,7 @@ export const useMutableAuth: (props: MutableAuthProps) => MutableAuthState = ({
 
   const signUp = () => {
     (async function () {
-      const { error } = await supabaseClient.auth.signUp({ email, password });
+      const { error } = await supabase.auth.signUp({ email, password });
 
       if (error) {
         alert(error.message);
@@ -44,7 +44,7 @@ export const useMutableAuth: (props: MutableAuthProps) => MutableAuthState = ({
 
   const signIn = () => {
     (async function () {
-      const { error } = await supabaseClient.auth.signIn({ email, password });
+      const { error } = await supabase.auth.signIn({ email, password });
 
       if (error) {
         alert(error.message);
