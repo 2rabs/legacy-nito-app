@@ -1,6 +1,5 @@
-import '../styles/globals.css';
+import '@/styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { UserProvider, useUser } from '@supabase/auth-helpers-react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
@@ -8,7 +7,8 @@ import React, { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { LiffProvider } from '@/components';
-import { memberState } from '@/states/member';
+import { supabase } from '@/lib/supabaseClient';
+import { memberState } from '@/stores/member';
 
 const AppInit: React.FC = () => {
   const { push, replace, pathname } = useRouter();
@@ -28,7 +28,7 @@ const AppInit: React.FC = () => {
       }
     } else if (user && pathname !== '/member/registration') {
       try {
-        const { data: member } = await supabaseClient
+        const { data: member } = await supabase
           .from('members')
           .select('*')
           .eq('uuid', user.id)
@@ -55,7 +55,7 @@ const AppInit: React.FC = () => {
     }
   };
 
-  supabaseClient.auth.onAuthStateChange((event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && pathname === '/auth') {
       const user = session?.user;
       if (!user) {
@@ -65,7 +65,7 @@ const AppInit: React.FC = () => {
 
       (async function () {
         try {
-          const { data: member } = await supabaseClient
+          const { data: member } = await supabase
             .from('members')
             .select('*')
             .eq('uuid', user.id)
@@ -98,7 +98,7 @@ const AppInit: React.FC = () => {
   });
 
   useEffect(() => {
-    validateSession();
+    void validateSession();
   }, [isLoading]);
 
   return null;
@@ -107,7 +107,7 @@ const AppInit: React.FC = () => {
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <RecoilRoot>
-      <UserProvider supabaseClient={supabaseClient}>
+      <UserProvider supabaseClient={supabase}>
         <LiffProvider>
           <Component {...pageProps} />
           <AppInit />

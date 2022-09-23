@@ -1,4 +1,3 @@
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useUser as useSupabaseUser } from '@supabase/auth-helpers-react';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -9,7 +8,8 @@ import { useSetRecoilState } from 'recoil';
 import { useLiff } from '@/components';
 import { ProgressCircular } from '@/components/Elements';
 import { MainLayout } from '@/components/Layout';
-import { memberState } from '@/states/member';
+import { supabase } from '@/lib/supabaseClient';
+import { memberState } from '@/stores/member';
 
 const MemberRegistrationScreen: NextPage = () => {
   const { userId: lineId, isInClient } = useLiff();
@@ -41,15 +41,13 @@ const MemberRegistrationScreen: NextPage = () => {
       setRegistering(true);
 
       try {
-        const { data: members, error: registerError } = await supabaseClient
-          .from('members')
-          .insert([
-            {
-              uuid: authUser.id,
-              line_id: lineId,
-              nickname: trimmedNickname,
-            },
-          ]);
+        const { data: members, error: registerError } = await supabase.from('members').insert([
+          {
+            uuid: authUser.id,
+            line_id: lineId,
+            nickname: trimmedNickname,
+          },
+        ]);
 
         console.log(registerError);
 
@@ -84,7 +82,7 @@ const MemberRegistrationScreen: NextPage = () => {
   };
 
   const onSignOutButtonClick = () => {
-    supabaseClient.auth.signOut();
+    supabase.auth.signOut();
   };
 
   if (!isInClient) {
@@ -108,7 +106,7 @@ const MemberRegistrationScreen: NextPage = () => {
       <section>
         <div className='min- flex flex-col justify-center py-12 sm:px-6 lg:px-8'>
           <div className='sm:mx-auto sm:w-full sm:max-w-md'>
-            <h2 className='mt-6 text-center text-3xl font-extrabold text-neutral-600'>
+            <h2 className='text-neutral-600 mt-6 text-center text-3xl font-extrabold'>
               メンバー登録
             </h2>
           </div>
@@ -136,7 +134,7 @@ const MemberRegistrationScreen: NextPage = () => {
                   title='空白以外の文字列を入力してください。'
                   value={nickname}
                   onChange={(event) => onChangeNickname(event.target.value)}
-                  className='mt-1 block w-full rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 transition duration-500 ease-in-out placeholder:text-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300'
+                  className='text-neutral-600 mt-1 block w-full rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base transition duration-500 ease-in-out placeholder:text-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300'
                 />
               </label>
 
